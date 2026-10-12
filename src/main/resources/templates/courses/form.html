@@ -1,0 +1,13 @@
+<!DOCTYPE html><html lang="vi" xmlns:th="http://www.thymeleaf.org"><head th:replace="~{fragments :: head('Thông tin khóa học')}"></head><body><header th:replace="~{fragments :: header}"></header><main class="narrow">
+<a class="back" th:href="@{/courses}">← Danh sách khóa học</a><div class="page-heading"><div><p class="eyebrow">CHƯƠNG TRÌNH ĐÀO TẠO</p><h1 th:text="${courseId == null ? 'Thêm khóa học' : 'Chỉnh sửa khóa học'}"></h1><p class="muted">Các trường có dấu * là bắt buộc.</p></div></div>
+<section class="panel"><form method="post" th:action="${courseId == null ? '/courses/create' : '/courses/' + courseId + '/edit'}" th:object="${form}">
+<div class="alert error" th:if="${#fields.hasAnyErrors()}" th:errors="*{all}" role="alert"></div>
+<div class="form-grid"><label class="full">Tên khóa học *<input th:field="*{name}" required maxlength="150" placeholder="Ví dụ: Java Spring Boot"></label>
+<label>Loại khóa học *<select th:field="*{categoryId}" required><option value="">-- Chọn loại --</option><option th:each="cat:${categories}" th:value="${cat.id}" th:text="${cat.name}"></option></select></label>
+<label>Học phí (đ) *<input type="number" th:field="*{tuitionFee}" min="0.01" step="0.01" required></label>
+<label>Thời lượng (giờ) *<input type="number" th:field="*{duration}" min="1" step="1" required></label>
+<label class="check"><input type="checkbox" th:field="*{active}"> Đang tuyển sinh</label>
+<label class="full">Mô tả<textarea th:field="*{description}" maxlength="4000" rows="5"></textarea></label></div>
+<p class="muted">Thời lượng ≤ 30 giờ: ngắn hạn; trên 30 giờ: dài hạn. Thêm ảnh ở trang chi tiết sau khi lưu.</p>
+<p th:if="${#lists.isEmpty(categories)}" class="alert error">Chưa có loại khóa học. Hãy tạo loại trước.</p>
+<div class="actions"><button class="btn" type="submit">Lưu khóa học</button><a class="btn secondary" th:href="@{/courses}">Hủy</a></div></form></section></main><footer th:replace="~{fragments :: footer}"></footer></body></html>

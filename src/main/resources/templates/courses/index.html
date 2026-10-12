@@ -1,0 +1,21 @@
+<!DOCTYPE html><html lang="vi" xmlns:th="http://www.thymeleaf.org"><head th:replace="~{fragments :: head('Danh sách khóa học')}"></head><body>
+<header th:replace="~{fragments :: header}"></header><main>
+<div class="page-heading"><div><p class="eyebrow">KHÔNG GIAN QUẢN TRỊ</p><h1>Quản lý khóa học</h1><p class="muted">Tra cứu, cập nhật và quản lý chương trình đào tạo.</p></div><a class="btn" th:href="@{/courses/create}">+ Thêm khóa học</a></div>
+<div th:replace="~{fragments :: alerts}"></div>
+<section class="panel"><h2>Tìm kiếm &amp; bộ lọc</h2><form method="get" th:action="@{/courses}" th:object="${filter}">
+<div class="filter-grid"><label>Tên khóa học<input th:field="*{keyword}" placeholder="Ví dụ: Java" maxlength="150"></label>
+<label>Loại khóa học<select th:field="*{categoryId}"><option value="">Tất cả loại</option><option th:each="cat:${categories}" th:value="${cat.id}" th:text="${cat.name}"></option></select></label>
+<label>Trạng thái<select th:field="*{active}"><option value="">Tất cả trạng thái</option><option value="true">Đang tuyển sinh</option><option value="false">Ngừng tuyển sinh</option></select></label>
+<label>Học phí từ (đ)<input type="number" th:field="*{minFee}" min="0" step="0.01" placeholder="Không giới hạn"></label>
+<label>Học phí đến (đ)<input type="number" th:field="*{maxFee}" min="0" step="0.01" placeholder="Không giới hạn"></label>
+<label>Sắp xếp<select th:field="*{sort}"><option value="feeAsc">Học phí tăng dần</option><option value="feeDesc">Học phí giảm dần</option><option value="durationAsc">Thời lượng tăng dần</option></select></label></div>
+<div class="alert error" th:if="${#fields.hasAnyErrors()}" th:errors="*{all}" role="alert"></div>
+<div class="actions"><button class="btn" type="submit">Áp dụng bộ lọc</button><a class="btn secondary" th:href="@{/courses}">Xóa bộ lọc</a></div></form></section>
+<section class="panel"><div class="section-heading"><h2>Danh sách khóa học</h2><span class="count" th:text="${#lists.size(courses)} + ' kết quả'"></span></div>
+<div th:if="${#lists.isEmpty(courses)}" class="empty"><h3>Không có khóa học để hiển thị</h3><p>Hãy kiểm tra thông báo hoặc thay đổi điều kiện tìm kiếm.</p></div>
+<div class="table-wrap" th:unless="${#lists.isEmpty(courses)}"><table><thead><tr><th>Khóa học</th><th>Loại khóa học</th><th>Học phí</th><th>Thời lượng</th><th>Trạng thái</th><th>Thao tác</th></tr></thead><tbody>
+<tr th:each="c:${courses}"><td><div class="course-cell"><img class="thumb" th:src="${c.thumbnail != null ? c.thumbnail.imageUrl : '/images/placeholder.svg'}" alt="Ảnh đại diện" onerror="this.onerror=null;this.src='/images/placeholder.svg'"><div><a class="course-title" th:href="@{/courses/{id}(id=${c.id})}" th:text="${c.name}"></a><small th:text="'ID: ' + ${c.id}"></small></div></div></td>
+<td th:text="${c.category.name}"></td><td class="nowrap" th:text="${#numbers.formatDecimal(c.tuitionFee,1,'POINT',0,'COMMA')} + ' đ'"></td><td><strong th:text="${c.duration} + ' giờ'"></strong><small th:text="${c.durationType}"></small></td>
+<td><span class="badge" th:classappend="${c.active ? 'active' : 'inactive'}" th:text="${c.active ? 'Đang tuyển sinh' : 'Ngừng tuyển sinh'}"></span></td>
+<td><div class="row-actions"><a th:href="@{/courses/{id}(id=${c.id})}">Chi tiết</a><a th:href="@{/courses/{id}/edit(id=${c.id})}">Sửa</a><form method="post" th:action="@{/courses/{id}/delete(id=${c.id})}" onsubmit="return confirm('Xóa khóa học và toàn bộ ảnh liên quan?')"><button class="link danger" type="submit">Xóa</button></form></div></td></tr>
+</tbody></table></div></section></main><footer th:replace="~{fragments :: footer}"></footer></body></html>

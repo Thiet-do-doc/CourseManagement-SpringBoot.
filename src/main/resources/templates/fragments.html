@@ -1,0 +1,5 @@
+<!DOCTYPE html><html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(title)"><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title th:text="${title} + ' | CourseHub'">CourseHub</title><link rel="stylesheet" th:href="@{/css/app.css}"></head>
+<body><header th:fragment="header"><nav class="nav"><a class="brand" th:href="@{/courses}"><span class="brand-icon">C</span> CourseHub <small>QUẢN TRỊ</small></a><div class="nav-links"><a th:href="@{/courses}">Khóa học</a><a th:href="@{/categories}">Loại khóa học</a></div></nav></header>
+<div th:fragment="alerts"><div class="alert success" role="status" th:if="${success}" th:text="${success}"></div><div class="alert error" role="alert" th:if="${error}" th:text="${error}"></div></div>
+<footer th:fragment="footer">CourseHub · Bài ôn luyện giữa kỳ · Java Spring Boot &amp; JPA</footer></body></html>
